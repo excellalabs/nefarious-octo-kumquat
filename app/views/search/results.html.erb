@@ -1,0 +1,5 @@
+<% @query.results.each do |result| %>
+  <div class='result-item'>
+    <%= link_to("#{result.text}", question_path(result.id), {data: {search_id:"#{@query.search.id}"}}) %>
+  </div>
+<% end %>

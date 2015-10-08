@@ -1,5 +1,6 @@
 class QuestionsController < ApplicationController
   before_action :set_question, only: [:show, :edit, :update, :destroy]
+  before_action :convert_search, only: :show
 
   # GET /questions
   # GET /questions.json
@@ -10,6 +11,14 @@ class QuestionsController < ApplicationController
   # GET /questions/1
   # GET /questions/1.json
   def show
+    @question = Question.find(params['id'])
+  end
+
+  def convert_search
+    return if request.referer.blank?
+    referer = CGI::parse(request.referer)['query'][0]
+    query_to_convert = Searchjoy::Search.where(normalized_query: referer).last
+    query_to_convert.convert(@question) unless query_to_convert.nil?
   end
 
   # GET /questions/new
